@@ -37,9 +37,9 @@ void verifierMarkov(liste_adjacence la) {
     }
 
     if (valide)
-        printf("✅ Le graphe est un graphe de Markov valide.\n");
+        printf("Le graphe est un graphe de Markov valide.\n");
     else
-        printf("❌ Le graphe n'est pas un graphe de Markov.\n");
+        printf("Le graphe n'est pas un graphe de Markov.\n");
 }
 
 // === Exporte la liste d’adjacence au format Mermaid ===

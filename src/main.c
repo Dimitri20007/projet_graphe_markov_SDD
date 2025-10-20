@@ -13,7 +13,7 @@ int main() {
     printf("\n=== Exportation vers Mermaid ===\n");
     exporterMermaid(la, "data/graphe_mermaid.mmd");
 
-    printf("\n➡️ Copiez le contenu de 'data/graphe_mermaid.mmd' sur https://www.mermaidchart.com/\n");
+    printf("\n Copiez le contenu de 'data/graphe_mermaid.mmd' sur https://www.mermaidchart.com/\n");
 
     return 0;
 }
