@@ -31,7 +31,7 @@ void ajouterCellule(liste* l, int arrivee, float proba) {
 void afficherListe(liste l) {
     cellule* tmp = l.head;
     while (tmp) {
-        printf(" -> (%d, %.2f)", tmp->arrivee, tmp->proba);
+        printf(" -> (%d, %.2f)", tmp->arrivee, tmp->proba); 
         tmp = tmp->suivant;
     }
     printf("\n");

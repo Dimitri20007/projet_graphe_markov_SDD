@@ -1,4 +1,5 @@
 #include "graph.h"
+#include <string.h>
 
 // === Génère l'identifiant (A, B, ..., Z, AA, AB, ...) ===
 char* getId(int num) {
@@ -64,12 +65,14 @@ void exporterMermaid(liste_adjacence la, const char* filename) {
     for (int i = 0; i < la.taille; i++) {
         cellule* tmp = la.tab[i].head;
         while (tmp) {
+            static char id[3];
+            strcpy(id, getId(tmp->arrivee));
             fprintf(file, "%s -->|%.2f|%s\n",
-                    getId(i + 1), tmp->proba, getId(tmp->arrivee));
+                    getId(i + 1), tmp->proba, id);
             tmp = tmp->suivant;
         }
     }
 
     fclose(file);
-    printf("✅ Fichier Mermaid généré : %s\n", filename);
+    printf("Fichier Mermaid généré : %s\n", filename);
 }
