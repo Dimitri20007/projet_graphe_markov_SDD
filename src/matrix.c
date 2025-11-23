@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-/* createMatrixFromAdjacency: construit une matrice de transition depuis la liste d'adjacence */
+/* construit une matrice d'adjacence depuis la liste d'adjacence */
 t_matrix createMatrixFromAdjacency(liste_adjacence la) {
     t_matrix matrix = createEmptyMatrix(la.taille);
 
@@ -18,7 +18,7 @@ t_matrix createMatrixFromAdjacency(liste_adjacence la) {
     return matrix;
 }
 
-/* printMatrix: affiche une matrice sur la sortie standard */
+/* affiche une matrice sur la sortie standard */
 void printMatrix(t_matrix matrix) {
     for (int i = 0; i < matrix.rows; i++) {
         for (int j = 0; j < matrix.cols; j++) {
@@ -28,7 +28,7 @@ void printMatrix(t_matrix matrix) {
     }
 }
 
-/* createEmptyMatrix: alloue et initialise une matrice carrée vide de taille 'size' */
+/*alloue et initialise une matrice carrée vide de taille 'size' */
 t_matrix createEmptyMatrix(int size) {
     t_matrix matrix;
     matrix.rows = size;
@@ -40,7 +40,7 @@ t_matrix createEmptyMatrix(int size) {
     return matrix;
 }
 
-/* copyMatrix: copie les éléments de src dans dest (mêmes dimensions) */
+/*copie les éléments de src dans dest (mêmes dimensions) */
 void copyMatrix(t_matrix dest, t_matrix src) {
     for (int i = 0; i < src.rows; i++) {
         for (int j = 0; j < src.cols; j++) {
@@ -49,7 +49,7 @@ void copyMatrix(t_matrix dest, t_matrix src) {
     }
 }
 
-/* multiplyMatrices: calcule result = m1 * m2 (produit matriciel) */
+/*calcule result = m1 * m2 (produit matriciel) */
 t_matrix multiplyMatrices(t_matrix m1, t_matrix m2, t_matrix result) {
     for (int i = 0; i < m1.rows; i++) {
         for (int j = 0; j < m2.cols; j++) {
@@ -62,7 +62,7 @@ t_matrix multiplyMatrices(t_matrix m1, t_matrix m2, t_matrix result) {
     return result;
 }
 
-/* diffMatrices: renvoie la somme des différences absolues entre deux matrices (norme L1) */
+/*renvoie la somme des différences absolues entre deux matrices (norme L1) */
 float diffMatrices(t_matrix m1, t_matrix m2) {
     float diff = 0.0f;
     for (int i = 0; i < m1.rows; i++) {
@@ -73,7 +73,7 @@ float diffMatrices(t_matrix m1, t_matrix m2) {
     return diff;
 }
 
-/* subMatrix: extrait la sous-matrice correspondant à la i-ème classe de la partition */
+/*extrait la sous-matrice correspondant à la i-ème classe de la partition */
 t_matrix subMatrix(t_matrix matrix, t_partition part, int compo_index) {
     int size = part.classes[compo_index].size;
     t_matrix submatrix = createEmptyMatrix(size);
@@ -107,8 +107,17 @@ int gcd(int *vals, int nbvals) {
     return result;
 }
 
-/* gcd
-Calcule le plus grand commun diviseur (PGCD) d'un tableau d'entiers `vals`
+
+
+/* getPeriod
+ Détermine la période d'une sous-matrice de transition `sub_matrix`.
+ Méthode implémentée :
+ 1) On calcule successivement les puissances sub_matrix^1, sub_matrix^2, ..., sub_matrix^n
+    (stockées dans `power_matrix`).
+ 2) Pour chaque puissance t on examine la diagonale : si un élément
+    diagonal est strictement positif, on enregistre t dans le tableau `periods`.
+ 3) Après avoir collecté tous les t (jusqu'à n), on retourne le PGCD des t trouvés
+    via la fonction `gcd`.
  */
 
 int getPeriod(t_matrix sub_matrix) {
@@ -149,40 +158,29 @@ int getPeriod(t_matrix sub_matrix) {
     return period;
 }
 
-/* getPeriod
- Détermine la période d'une sous-matrice de transition `sub_matrix`.
- Méthode implémentée :
- 1) On calcule successivement les puissances sub_matrix^1, sub_matrix^2, ..., sub_matrix^n
-    (stockées dans `power_matrix`).
- 2) Pour chaque puissance t on examine la diagonale : si un élément
-    diagonal est strictement positif, on enregistre t dans le tableau `periods`.
- 3) Après avoir collecté tous les t (jusqu'à n), on retourne le PGCD des t trouvés
-    via la fonction `gcd`.
- */
-
 /*
    Vecteurs / distributions
 */
 
-/* createZeroVector: alloue et initialise un vecteur de taille n à zéro */
+/*alloue et initialise un vecteur de taille n à zéro */
 float *createZeroVector(int n) {
     float *v = (float*)calloc(n, sizeof(float));
     return v;
 }
 
-/* freeVector: libère un vecteur alloué */
+/*libère un vecteur alloué */
 void freeVector(float *v) {
     if (v) free(v);
 }
 
-/* copyVector: copie n éléments de src vers dest */
+/* copie n éléments de src vers dest */
 void copyVector(float *dest, float *src, int n) {
     for (int i = 0; i < n; i++) {
         dest[i] = src[i];
     }
 }
 
-/* multiplyVectorMatrix: calcule out = vec * mat (vecteur ligne) */
+/*calcule out = vec * mat (vecteur ligne) */
 void multiplyVectorMatrix(float *vec, t_matrix mat, float *out) {
     int n = mat.cols; // suppose matrice carrée
     for (int j = 0; j < n; j++) {
@@ -197,7 +195,7 @@ void multiplyVectorMatrix(float *vec, t_matrix mat, float *out) {
     }
 }
 
-/* diffVectors: somme des différences absolues entre deux vecteurs (norme L1) */
+/*somme des différences absolues entre deux vecteurs (norme L1) */
 float diffVectors(float *v1, float *v2, int n) {
     float d = 0.0f;
     for (int i = 0; i < n; i++) {
@@ -206,7 +204,7 @@ float diffVectors(float *v1, float *v2, int n) {
     return d;
 }
 
-/* computeStationaryDistribution: méthode itérative pour obtenir la distribution stationnaire */
+/*méthode itérative pour obtenir la distribution stationnaire */
 float *computeStationaryDistribution(t_matrix mat, float epsilon, int max_iter) {
     int n = mat.rows;
     float *p = createZeroVector(n);

@@ -4,7 +4,7 @@
     Partie 1 : utilitaires
 */
 
-/* getId: retourne un identifiant lisible pour le sommet (A, B, ..., AA...). */
+/*retourne un identifiant lisible pour le sommet (A, B, ..., AA...). */
 char* getId(int num) {
     static char id[8];
     id[0] = '\0';
@@ -26,7 +26,7 @@ char* getId(int num) {
     return id;
 }
 
-/* verifierMarkov: vérifie la somme des probabilités sortantes par sommet. */
+/* vérifie la somme des probabilités sortantes par sommet. */
 void verifierMarkov(liste_adjacence la) {
     int valide = 1;
     for (int i = 0; i < la.taille; i++) {
@@ -47,7 +47,7 @@ void verifierMarkov(liste_adjacence la) {
         printf("Le graphe n'est pas un graphe de Markov.\n");
 }
 
-/* exporterMermaid: exporte la liste d'adjacence au format Mermaid. */
+/* exporte la liste d'adjacence au format Mermaid. */
 void exporterMermaid(liste_adjacence la, const char* filename) {
     FILE* file = fopen(filename, "wt");
     if (!file) {
@@ -77,7 +77,7 @@ void exporterMermaid(liste_adjacence la, const char* filename) {
     Partie 2 : Tarjan (composantes fortement connexes)
 */
 
-/* init_tarjan_vertices: initialise les structures nécessaires à Tarjan. */
+/*initialise les structures nécessaires à Tarjan. */
 t_tarjan_vertex* init_tarjan_vertices(int n) {
     t_tarjan_vertex *arr = (t_tarjan_vertex*)malloc(n * sizeof(t_tarjan_vertex));
     if (!arr) {
@@ -93,14 +93,14 @@ t_tarjan_vertex* init_tarjan_vertices(int n) {
     return arr;
 }
 
-/* init_stack: initialise une pile dynamique. */
+/* initialise une pile dynamique. */
 void init_stack(int_stack *s) {
     s->cap = 16;
     s->data = (int*)malloc(s->cap * sizeof(int));
     s->top = 0;
 }
 
-/* push_stack: empile une valeur sur la pile (agrandit si besoin). */
+/* empile une valeur sur la pile (agrandit si besoin). */
 void push_stack(int_stack *s, int v) {
     if (s->top >= s->cap) {
         s->cap *= 2;
@@ -109,7 +109,7 @@ void push_stack(int_stack *s, int v) {
     s->data[s->top++] = v;
 }
 
-/* pop_stack: dépile et renvoie la valeur (ou -1 si vide). */
+/*dépile et renvoie la valeur (ou -1 si vide). */
 int pop_stack(int_stack *s) {
     if (s->top == 0) {
         return -1;
@@ -117,12 +117,12 @@ int pop_stack(int_stack *s) {
     return s->data[--s->top];
 }
 
-/* stack_empty: retourne 1 si la pile est vide, sinon 0. */
+/*retourne 1 si la pile est vide, sinon 0. */
 int stack_empty(int_stack *s) {
     return s->top == 0;
 }
 
-/* free_stack: libère la mémoire de la pile. */
+/*libère la mémoire de la pile. */
 void free_stack(int_stack *s) {
     if (s->data) {
         free(s->data);
@@ -131,7 +131,7 @@ void free_stack(int_stack *s) {
     s->cap = s->top = 0;
 }
 
-/* init_partition: initialise une partition vide de classes. */
+/*initialise une partition vide de classes. */
 void init_partition(t_partition *p) {
     p->cap = 8;
     p->nb = 0;
@@ -139,7 +139,7 @@ void init_partition(t_partition *p) {
     if (!p->classes) { perror("alloc partition"); exit(EXIT_FAILURE); }
 }
 
-/* init_classe: initialise une classe et son tableau de membres. */
+/* initialise une classe et son tableau de membres. */
 void init_classe(t_classe *c, const char *name) {
     strncpy(c->name, name, sizeof(c->name)-1);
     c->name[sizeof(c->name)-1] = '\0';
@@ -149,7 +149,7 @@ void init_classe(t_classe *c, const char *name) {
     if (!c->members) { perror("alloc class members"); exit(EXIT_FAILURE); }
 }
 
-/* add_member_to_classe: ajoute un sommet à la classe (réalloue si besoin). */
+/*ajoute un sommet à la classe (réalloue si besoin). */
 void add_member_to_classe(t_classe *c, int vertex) {
     if (c->size >= c->capacity) {
         c->capacity *= 2;
@@ -158,7 +158,7 @@ void add_member_to_classe(t_classe *c, int vertex) {
     c->members[c->size++] = vertex;
 }
 
-/* add_class: ajoute une classe à la partition (réalloue si nécessaire). */
+/*ajoute une classe à la partition (réalloue si nécessaire). */
 void add_class(t_partition *p, t_classe c) {
     if (p->nb >= p->cap) {
         p->cap *= 2;
@@ -167,7 +167,7 @@ void add_class(t_partition *p, t_classe c) {
     p->classes[p->nb++] = c;
 }
 
-/* free_partition: libère la mémoire utilisée par la partition. */
+/*libère la mémoire utilisée par la partition. */
 void free_partition(t_partition *p) {
     if (!p) return;
     for (int i = 0; i < p->nb; i++) {
@@ -178,7 +178,7 @@ void free_partition(t_partition *p) {
     p->nb = p->cap = 0;
 }
 
-/* strongconnect: sous-routine récursive de Tarjan.
+/* sous-routine récursive de Tarjan.
  Algorithme : assignation d'index/lowlink, empilement, exploration
  récursive des voisins, et dépilement pour former une composante lorsque
  lowlink == index. Utilise une pile pour détecter les sommets en cours.
@@ -228,6 +228,7 @@ static void strongconnect(int v_idx, t_tarjan_vertex *V, int *index_ptr, int_sta
     }
 }
 
+// parcours chaque sommet pour trouver les composantes fortement connexes.
 t_partition tarjan(liste_adjacence la) {
     int n = la.taille;
     t_partition partition;
@@ -249,7 +250,7 @@ t_partition tarjan(liste_adjacence la) {
 /*
     Diagramme de Hasse (liens entre classes)
 */
-/* init_link_array: initialise la structure dynamique de liens entre classes. */
+/*initialise la structure dynamique de liens entre classes. */
 void init_link_array(t_link_array *la) {
     la->cap = 8;
     la->size = 0;
@@ -257,7 +258,7 @@ void init_link_array(t_link_array *la) {
     if (!la->links) { perror("alloc links"); exit(EXIT_FAILURE); }
 }
 
-/* link_exists: retourne 1 si le lien from->to existe déjà, sinon 0. */
+/*retourne 1 si le lien from->to existe déjà, sinon 0. */
 int link_exists(t_link_array *la, int from, int to) {
     for (int i = 0; i < la->size; i++) {
         if (la->links[i].from == from && la->links[i].to == to) {
@@ -267,7 +268,7 @@ int link_exists(t_link_array *la, int from, int to) {
     return 0;
 }
 
-/* add_link_if_not_exists: ajoute un lien from->to si absent (évite auto-liens). */
+/*ajoute un lien from->to si absent (évite auto-liens). */
 void add_link_if_not_exists(t_link_array *la, int from, int to) {
     if (from == to) return;
     if (link_exists(la, from, to)) return;
@@ -280,7 +281,7 @@ void add_link_if_not_exists(t_link_array *la, int from, int to) {
     la->size++;
 }
 
-/* build_vertex_to_class_map: renvoie une table map[v] -> permet de savoir a quel classe appartient un sommet. */
+/* renvoie une table map[v] -> permet de savoir a quel classe appartient un sommet. */
 int* build_vertex_to_class_map(t_partition *p, int n) {
     int *map = (int*)malloc((n+1) * sizeof(int));
     if (!map) { perror("alloc map"); exit(EXIT_FAILURE); }
@@ -296,7 +297,7 @@ int* build_vertex_to_class_map(t_partition *p, int n) {
     return map;
 }
 
-/* create_links_from_partition: construit les liens entre classes à partir des arêtes. */
+/*construit les liens entre classes à partir des arêtes. */
 t_link_array create_links_from_partition(liste_adjacence la, t_partition *p, int *vertex_to_class) {
     t_link_array arr;
     init_link_array(&arr);
@@ -316,7 +317,7 @@ t_link_array create_links_from_partition(liste_adjacence la, t_partition *p, int
     return arr;
 }
 
-/* free_link_array: libère la mémoire du tableau de liens. */
+/*libère la mémoire du tableau de liens. */
 void free_link_array(t_link_array *la) {
     if (!la) return;
     if (la->links) free(la->links);
@@ -324,7 +325,7 @@ void free_link_array(t_link_array *la) {
     la->size = la->cap = 0;
 }
 
-/* exporterMermaidHasse: exporte le diagramme de Hasse au format Mermaid. */
+/*exporte le diagramme de Hasse au format Mermaid. */
 void exporterMermaidHasse(t_partition *p, t_link_array *links, const char *filename) {
     FILE *f = fopen(filename, "wt");
     if (!f) { perror("open hasse file"); exit(EXIT_FAILURE); }

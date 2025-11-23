@@ -4,7 +4,7 @@
 #include "locale.h"
 #include <windows.h>
 
-/* main: point d'entrée du programme et flux principal d'exécution */
+/*point d'entrée du programme et flux principal d'exécution */
 int main() {
     // pour la syntaxe UTF-8 sous Windows
     setlocale(LC_ALL, "fr_FR.UTF-8");

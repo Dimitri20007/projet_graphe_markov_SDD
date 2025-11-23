@@ -1,6 +1,6 @@
 #include "graph.h"
 
-/* creerCellule: crée et initialise une cellule représentant une arête */
+/* crée et initialise une cellule représentant une arête */
 cellule* creerCellule(int arrivee, float proba) {
     cellule* newCell = (cellule*)malloc(sizeof(cellule));
     if (!newCell) {
@@ -13,21 +13,21 @@ cellule* creerCellule(int arrivee, float proba) {
     return newCell;
 }
 
-/* creerListe: crée une liste d'arêtes vide */
+/* crée une liste d'arêtes vide */
 liste creerListe() {
     liste l;
     l.head = NULL;
     return l;
 }
 
-/* ajouterCellule: ajoute une arête (cellule) en tête de liste */
+/*ajoute une arête (cellule) en tête de liste */
 void ajouterCellule(liste* l, int arrivee, float proba) {
     cellule* newCell = creerCellule(arrivee, proba);
     newCell->suivant = l->head;
     l->head = newCell;
 }
 
-/* afficherListe: affiche les arêtes d'une liste */
+/*affiche les arêtes d'une liste */
 void afficherListe(liste l) {
     cellule* tmp = l.head;
     while (tmp) {
@@ -37,7 +37,7 @@ void afficherListe(liste l) {
     printf("\n");
 }
 
-/* creerListeAdjacence: alloue et initialise une liste d'adjacence */
+/* alloue et initialise une liste d'adjacence */
 liste_adjacence creerListeAdjacence(int taille) {
     liste_adjacence la;
     la.taille = taille;
@@ -52,7 +52,7 @@ liste_adjacence creerListeAdjacence(int taille) {
     return la;
 }
 
-/* afficherListeAdjacence: affiche la liste d'adjacence complète */
+/*affiche la liste d'adjacence complète */
 void afficherListeAdjacence(liste_adjacence la) {
     for (int i = 0; i < la.taille; i++) {
         printf("Sommet %d :", i + 1);
@@ -60,7 +60,7 @@ void afficherListeAdjacence(liste_adjacence la) {
     }
 }
 
-/* readGraph: lit un graphe pondéré depuis un fichier et retourne la liste d'adjacence */
+/* lit un graphe pondéré depuis un fichier et retourne la liste d'adjacence */
 liste_adjacence readGraph(const char* filename) {
     FILE* file = fopen(filename, "rt");
     if (!file) {
@@ -86,7 +86,7 @@ liste_adjacence readGraph(const char* filename) {
     return la;
 }
 
-/* free_liste_adjacence: libère la mémoire d'une liste d'adjacence */
+/* libère la mémoire d'une liste d'adjacence */
 void free_liste_adjacence(liste_adjacence *la) {
     if (!la || !la->tab) return;
     for (int i = 0; i < la->taille; i++) {
