@@ -109,13 +109,6 @@ int gcd(int *vals, int nbvals) {
 
 /* gcd
  * Calcule le plus grand commun diviseur (PGCD) d'un tableau d'entiers `vals`
- * contenant `nbvals` éléments. Retourne 0 si `nbvals == 0`.
- *
- * Algorithme : application de l'algorithme d'Euclide pair-à-pair :
- *    result = vals[0]
- *    pour i de 1 à nbvals-1 : result = gcd(result, vals[i])
- * La boucle while met en oeuvre la réduction classique (a, b) -> (b, a mod b)
- * jusqu'à ce que b devienne zéro ; à ce moment `a` contient le gcd(a_initial,b_initial).
  */
 
 int getPeriod(t_matrix sub_matrix) {
@@ -158,12 +151,6 @@ int getPeriod(t_matrix sub_matrix) {
 
 /* getPeriod
  * Détermine la période d'une sous-matrice de transition `sub_matrix`.
- *
- * Définition utilisée : période = PGCD des entiers t >= 1 tels que
- * (sub_matrix^t)_{ii} > 0 pour au moins un i (i.e. il existe un retour en
- * t pas pour un état de la classe). Pour une classe irréductible cette
- * période est la même pour tous les états de la classe.
- *
  * Méthode implémentée :
  * 1) On calcule successivement les puissances sub_matrix^1, sub_matrix^2, ..., sub_matrix^n
  *    (stockées dans `power_matrix`).
@@ -171,18 +158,12 @@ int getPeriod(t_matrix sub_matrix) {
  *    diagonal est strictement positif, on enregistre t dans le tableau `periods`.
  * 3) Après avoir collecté tous les t (jusqu'à n), on retourne le PGCD des t trouvés
  *    via la fonction `gcd`.
- *
- * Remarques pratiques :
- * - On limite la recherche à t <= n (taille de la classe). C'est une borne
- *   pratique ; si nécessaire on peut l'étendre mais il faut alors adapter
- *   l'allocation de `periods`.
- * - Si aucun t n'est trouvé (`period_count == 0`) la fonction retournera 0
- *   (comportement défini par `gcd` pour nbvals == 0).
  */
 
 /* ------------------------
    Vecteurs / distributions
    ------------------------*/
+
 /* createZeroVector: alloue et initialise un vecteur de taille n à zéro */
 float *createZeroVector(int n) {
     float *v = (float*)calloc(n, sizeof(float));
@@ -196,13 +177,17 @@ void freeVector(float *v) {
 
 /* copyVector: copie n éléments de src vers dest */
 void copyVector(float *dest, float *src, int n) {
-    for (int i = 0; i < n; i++) dest[i] = src[i];
+    for (int i = 0; i < n; i++) {
+        dest[i] = src[i];
+    }
 }
 
 /* multiplyVectorMatrix: calcule out = vec * mat (vecteur ligne) */
 void multiplyVectorMatrix(float *vec, t_matrix mat, float *out) {
-    int n = mat.cols; // assume square
-    for (int j = 0; j < n; j++) out[j] = 0.0f;
+    int n = mat.cols; // suppose matrice carrée
+    for (int j = 0; j < n; j++) {
+        out[j] = 0.0f;
+    }
     for (int i = 0; i < mat.rows; i++) {
         float vi = vec[i];
         if (vi == 0.0f) continue;
@@ -215,7 +200,9 @@ void multiplyVectorMatrix(float *vec, t_matrix mat, float *out) {
 /* diffVectors: somme des différences absolues entre deux vecteurs (norme L1) */
 float diffVectors(float *v1, float *v2, int n) {
     float d = 0.0f;
-    for (int i = 0; i < n; i++) d += fabsf(v1[i] - v2[i]);
+    for (int i = 0; i < n; i++) {
+        d += fabsf(v1[i] - v2[i]);
+    }
     return d;
 }
 
@@ -224,8 +211,10 @@ float *computeStationaryDistribution(t_matrix mat, float epsilon, int max_iter) 
     int n = mat.rows;
     float *p = createZeroVector(n);
     float *tmp = createZeroVector(n);
-    /* start with uniform distribution */
-    for (int i = 0; i < n; i++) p[i] = 1.0f / n;
+    /* démarrage avec une distribution uniforme */
+    for (int i = 0; i < n; i++) {
+        p[i] = 1.0f / n;
+    }
 
     int iter = 0;
     while (iter < max_iter) {
@@ -236,5 +225,5 @@ float *computeStationaryDistribution(t_matrix mat, float epsilon, int max_iter) 
         iter++;
     }
     freeVector(tmp);
-    return p; /* caller must free */
+    return p; /* le code appelant doit libérer */
 }

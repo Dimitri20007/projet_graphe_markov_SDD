@@ -130,9 +130,19 @@ int main() {
         printf("Sommes des lignes de la sous-matrice (par état dans la classe) :\n");
         for (int r = 0; r < submatrix.rows; r++) {
             float s = 0.0f;
-            for (int c = 0; c < submatrix.cols; c++) s += submatrix.data[r][c];
-            printf("  Etat %d (dans classe) : somme = %.6f %s\n", partition.classes[i].members[r], s,
-                   (s > 0.999f && s < 1.001f) ? "(stochastique)" : (s < 0.999f ? "(sous-stochastique: masse sortante possible)" : "(>1 erreur?)"));
+            for (int c = 0; c < submatrix.cols; c++) {
+                s += submatrix.data[r][c];
+            }
+            char status[64];
+            if (s > 0.999f && s < 1.001f) {
+                strcpy(status, "(stochastique)");
+            } else if (s < 0.999f) {
+                strcpy(status, "(sous-stochastique: masse sortante possible)");
+            } else {
+                strcpy(status, "(>1 erreur?)");
+            }
+            printf("  Etat %d (dans classe) : somme = %.6f %s\n",
+                   partition.classes[i].members[r], s, status);
         }
 
         /* Calculer la limite p0 * S^k pour p0 uniforme sur la classe (même pour classes transitoires) */
@@ -141,20 +151,33 @@ int main() {
             float *pcur = createZeroVector(m);
             float *pnext = createZeroVector(m);
             if (m > 0) {
-                for (int t = 0; t < m; t++) pcur[t] = 1.0f / m; /* uniform */
-                int it = 0; int max_it_local = 100000; float eps_local = 1e-6f;
+                for (int t = 0; t < m; t++) {
+                    pcur[t] = 1.0f / m; /* uniforme */
+                }
+                int it = 0;
+                int max_it_local = 100000;
+                float eps_local = 1e-6f;
                 while (it < max_it_local) {
                     multiplyVectorMatrix(pcur, submatrix, pnext);
                     float d = diffVectors(pcur, pnext, m);
                     copyVector(pcur, pnext, m);
-                    if (d < eps_local) break;
+                    if (d < eps_local) {
+                        break;
+                    }
                     it++;
                 }
-                float mass = 0.0f; for (int t = 0; t < m; t++) mass += pcur[t];
+                float mass = 0.0f;
+                for (int t = 0; t < m; t++) {
+                    mass += pcur[t];
+                }
+                // stochastique signifie que la somme des composantes doit être 1(prochement), ce qui permet de savoir si la classe est fermée ou non
                 printf("Limite (approx) pour p0 uniforme sur la classe (it=%d) : somme des composantes = %.8f\n", it, mass);
-                for (int t = 0; t < m; t++) printf("  Etat %d : %.8f\n", partition.classes[i].members[t], pcur[t]);
+                for (int t = 0; t < m; t++) {
+                    printf("  Etat %d : %.8f\n", partition.classes[i].members[t], pcur[t]);
+                }
             }
-            freeVector(pcur); freeVector(pnext);
+            freeVector(pcur);
+            freeVector(pnext);
         }
         /* Déterminer si la classe est persistante (pas de flèches sortantes dans le Hasse réduit) */
         if(compute_caracteristics(&partition, &hasse, i+1) == 0) {
@@ -169,13 +192,40 @@ int main() {
     }
 
     /* libérer matrices temporaires utilisées plus haut */
-    for (int i = 0; i < m3.rows; i++) free(m3.data[i]); free(m3.data);
-    for (int i = 0; i < temp1.rows; i++) free(temp1.data[i]); free(temp1.data);
-    for (int i = 0; i < temp2.rows; i++) free(temp2.data[i]); free(temp2.data);
-    for (int i = 0; i < m7.rows; i++) free(m7.data[i]); free(m7.data);
-    for (int i = 0; i < temp3.rows; i++) free(temp3.data[i]); free(temp3.data);
-    for (int i = 0; i < prev.rows; i++) free(prev.data[i]); free(prev.data);
-    for (int i = 0; i < current.rows; i++) free(current.data[i]); free(current.data);
+    for (int i = 0; i < m3.rows; i++) {
+        free(m3.data[i]);
+    }
+    free(m3.data);
+
+    for (int i = 0; i < temp1.rows; i++) {
+        free(temp1.data[i]);
+    }
+    free(temp1.data);
+
+    for (int i = 0; i < temp2.rows; i++) {
+        free(temp2.data[i]);
+    }
+    free(temp2.data);
+
+    for (int i = 0; i < m7.rows; i++) {
+        free(m7.data[i]);
+    }
+    free(m7.data);
+
+    for (int i = 0; i < temp3.rows; i++) {
+        free(temp3.data[i]);
+    }
+    free(temp3.data);
+
+    for (int i = 0; i < prev.rows; i++) {
+        free(prev.data[i]);
+    }
+    free(prev.data);
+
+    for (int i = 0; i < current.rows; i++) {
+        free(current.data[i]);
+    }
+    free(current.data);
 
     // Cleanup
     free(vertex_to_class);

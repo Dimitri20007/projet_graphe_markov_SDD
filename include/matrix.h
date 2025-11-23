@@ -3,14 +3,17 @@
 
 #include "graph.h"
 
+// Structure représentant une matrice de floats
 typedef struct {
     int rows;
     int cols;
     float **data;
 } t_matrix;
 
+// Fonctions pour la manipulation des matrices
 void printMatrix(t_matrix matrix);
 
+// Création et manipulation des matrices
 t_matrix createMatrixFromAdjacency(liste_adjacence la);
 t_matrix createEmptyMatrix(int size);
 void copyMatrix(t_matrix dest, t_matrix src);

@@ -1,1 +1,0 @@
-gcc src/main.c src/graph.c src/utils.c -Iinclude -o markov

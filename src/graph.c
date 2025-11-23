@@ -76,10 +76,11 @@ liste_adjacence readGraph(const char* filename) {
     }
     liste_adjacence la = creerListeAdjacence(nbvert);
     while (fscanf(file, "%d %d %f", &depart, &arrivee, &proba) == 3) {
-        if (depart >= 1 && depart <= nbvert)
+        if (depart >= 1 && depart <= nbvert) {
             ajouterCellule(&la.tab[depart - 1], arrivee, proba);
-        else
+        } else {
             fprintf(stderr, "Avertissement: sommet de depart %d hors intervalle\n", depart);
+        }
     }
     fclose(file);
     return la;
