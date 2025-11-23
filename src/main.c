@@ -13,7 +13,6 @@ int main() {
 
 
     // 1) Charger le graphe (Partie 1)
-        // 1) Charger le graphe (Partie 1)
         /* Permettre à l'utilisateur de choisir un fichier dans le dossier data/
            On vérifie l'existence du fichier avant d'appeler readGraph (qui exit() en cas d'erreur). */
         char filename[256];

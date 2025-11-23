@@ -1,8 +1,8 @@
 #include "graph.h"
 
-/* -------------------------
+/* 
     Partie 1 : utilitaires
-    -------------------------*/
+*/
 
 /* getId: retourne un identifiant lisible pour le sommet (A, B, ..., AA...). */
 char* getId(int num) {
@@ -73,9 +73,9 @@ void exporterMermaid(liste_adjacence la, const char* filename) {
     printf("Fichier Mermaid généré : %s\n", filename);
 }
 
-/* -------------------------
+/* 
     Partie 2 : Tarjan (composantes fortement connexes)
-    -------------------------*/
+*/
 
 /* init_tarjan_vertices: initialise les structures nécessaires à Tarjan. */
 t_tarjan_vertex* init_tarjan_vertices(int n) {
@@ -179,10 +179,9 @@ void free_partition(t_partition *p) {
 }
 
 /* strongconnect: sous-routine récursive de Tarjan.
- *
- * Algorithme : assignation d'index/lowlink, empilement, exploration
- * récursive des voisins, et dépilement pour former une composante lorsque
- * lowlink == index. Utilise une pile pour détecter les sommets en cours.
+ Algorithme : assignation d'index/lowlink, empilement, exploration
+ récursive des voisins, et dépilement pour former une composante lorsque
+ lowlink == index. Utilise une pile pour détecter les sommets en cours.
  */
 static void strongconnect(int v_idx, t_tarjan_vertex *V, int *index_ptr, int_stack *S, t_partition *partition, liste_adjacence *la) {
     V[v_idx].index = (*index_ptr);
@@ -247,9 +246,9 @@ t_partition tarjan(liste_adjacence la) {
     return partition;
 }
 
-/* -------------------------
+/*
     Diagramme de Hasse (liens entre classes)
-    -------------------------*/
+*/
 /* init_link_array: initialise la structure dynamique de liens entre classes. */
 void init_link_array(t_link_array *la) {
     la->cap = 8;
@@ -371,7 +370,7 @@ int compute_caracteristics(t_partition *p, t_link_array *links, int class_number
 }
 
 /* affiche pour chaque classe si elle est transitoire ou persistante et si il y a un état absorbant.
- * Indique aussi si le graphe est irréductible (une seule classe).
+ Indique aussi si le graphe est irréductible (une seule classe).
  */
 void compute_and_print_characteristics(t_partition *p, t_link_array *links) {
     printf("\n=== Caractéristiques des classes ===\n");

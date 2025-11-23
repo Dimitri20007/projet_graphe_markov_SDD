@@ -108,7 +108,7 @@ int gcd(int *vals, int nbvals) {
 }
 
 /* gcd
- * Calcule le plus grand commun diviseur (PGCD) d'un tableau d'entiers `vals`
+Calcule le plus grand commun diviseur (PGCD) d'un tableau d'entiers `vals`
  */
 
 int getPeriod(t_matrix sub_matrix) {
@@ -150,19 +150,19 @@ int getPeriod(t_matrix sub_matrix) {
 }
 
 /* getPeriod
- * Détermine la période d'une sous-matrice de transition `sub_matrix`.
- * Méthode implémentée :
- * 1) On calcule successivement les puissances sub_matrix^1, sub_matrix^2, ..., sub_matrix^n
- *    (stockées dans `power_matrix`).
- * 2) Pour chaque puissance t on examine la diagonale : si un élément
- *    diagonal est strictement positif, on enregistre t dans le tableau `periods`.
- * 3) Après avoir collecté tous les t (jusqu'à n), on retourne le PGCD des t trouvés
- *    via la fonction `gcd`.
+ Détermine la période d'une sous-matrice de transition `sub_matrix`.
+ Méthode implémentée :
+ 1) On calcule successivement les puissances sub_matrix^1, sub_matrix^2, ..., sub_matrix^n
+    (stockées dans `power_matrix`).
+ 2) Pour chaque puissance t on examine la diagonale : si un élément
+    diagonal est strictement positif, on enregistre t dans le tableau `periods`.
+ 3) Après avoir collecté tous les t (jusqu'à n), on retourne le PGCD des t trouvés
+    via la fonction `gcd`.
  */
 
-/* ------------------------
+/*
    Vecteurs / distributions
-   ------------------------*/
+*/
 
 /* createZeroVector: alloue et initialise un vecteur de taille n à zéro */
 float *createZeroVector(int n) {

@@ -6,9 +6,9 @@
 #include <string.h>
 #include <math.h>
 
-/* ---------------------------
+/*
    Structures de la Partie 1
-   ---------------------------*/
+*/
 // cellule = arête
 typedef struct cellule {
     int arrivee;          // numéro du sommet d'arrivée (1-based)
@@ -39,9 +39,9 @@ void verifierMarkov(liste_adjacence la);
 char* getId(int num);
 void exporterMermaid(liste_adjacence la, const char* filename);
 
-/* ---------------------------
+/*
    Structures et fonctions Partie 2 (Tarjan / Hasse)
-   ---------------------------*/
+*/
 typedef struct {
     int id;         // numéro du sommet (1..n)
     int index;      // index (numérotation temporelle) initialisé à -1
