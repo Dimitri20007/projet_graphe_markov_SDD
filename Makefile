@@ -1,27 +1,26 @@
-# Compilateur
+# ===== CONFIG =====
 CC = gcc
+CFLAGS = -Wall -Wextra -g -O2 -Iinclude -finput-charset=UTF-8 -fexec-charset=UTF-8 -DUNICODE -D_UNICODE
+SRC_DIR = src
+OBJ_DIR = obj
+BIN = markov.exe
+SRC = $(wildcard $(SRC_DIR)/*.c)
+OBJ = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC))
 
-# Options de compilation : 
-# -Wall = affiche les avertissements
-# -Wextra = affiche plus de détails
-# -Iinclude = indique où sont les fichiers .h
-CFLAGS = -Wall -Wextra -Iinclude
+# ===== RÈGLE PAR DÉFAUT =====
+all: $(BIN)
 
-# Fichiers sources
-SRC = src/main.c src/graph.c src/utils.c
+# ===== Compilation programme =====
+$(BIN): $(OBJ)
+	if not exist $(OBJ_DIR) mkdir $(OBJ_DIR)
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-# Fichiers objets (compilés)
-OBJ = $(SRC:.c=.o)
+# ===== Compilation des .c en .o =====
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	if not exist $(OBJ_DIR) mkdir $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# Nom de l'exécutable
-EXEC = markov
-
-# Commande par défaut : compilation
-all: $(EXEC)
-
-$(EXEC): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^
-
-# Nettoyer les fichiers compilés
+# ===== Nettoyage =====
 clean:
-	rm -f $(OBJ) $(EXEC)
+	if exist $(OBJ_DIR) rmdir /s /q $(OBJ_DIR)
+	if exist $(BIN) del $(BIN)
